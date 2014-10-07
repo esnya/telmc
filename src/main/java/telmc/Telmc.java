@@ -57,12 +57,11 @@ import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@SideOnly(Side.SERVER)
 @Mod(modid = Telmc.MODID, version = Telmc.VERSION)
 public class Telmc
 {
     public static final String MODID = "telmc";
-    public static final String VERSION = "0.1";
+    public static final String VERSION = "0.2";
     
     private String address;
     private int port;
@@ -80,7 +79,8 @@ public class Telmc
 	{
 		return side.isServer();
 	}
-    
+
+	@SideOnly(Side.SERVER)
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
     	Configuration configuration = new Configuration(event.getSuggestedConfigurationFile());
@@ -94,7 +94,8 @@ public class Telmc
     	
     	configuration.save();
     }
-    
+
+	@SideOnly(Side.SERVER)
     @EventHandler
     public void init(FMLInitializationEvent event) throws IOException
     {
