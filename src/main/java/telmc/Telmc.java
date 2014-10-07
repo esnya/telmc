@@ -57,11 +57,12 @@ import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = Telmc.MODID, version = Telmc.VERSION)
+@Mod(modid = Telmc.MODID, name = Telmc.NAME, version = Telmc.VERSION)
 public class Telmc
 {
     public static final String MODID = "telmc";
-    public static final String VERSION = "0.2";
+    public static final String NAME = "TelMC";
+    public static final String VERSION = "0.3";
     
     private String address;
     private int port;
@@ -70,14 +71,10 @@ public class Telmc
 
     private Thread listenerThread;
 
-    public String name() {
-    	return "Telmc";
-    }
-
 	@NetworkCheckHandler
 	public boolean netCheckHandler(Map<String, String> mods, Side side)
 	{
-		return side.isServer();
+		return true;
 	}
 
 	@SideOnly(Side.SERVER)
@@ -234,7 +231,7 @@ class Session implements Runnable {
 								mode = 1;
 								out.write("\r\nPassword: ");
 							} else {
-								break;
+								out.write("\r\nLogin Name: ");
 							}
 						} else if (mode == 1) {	// Password
 							if (command.equals(password)) {
@@ -246,7 +243,7 @@ class Session implements Runnable {
 								out.write("\r\nWelcome!\r\n");
 								out.write("telmc> ");
 							} else {
-								break;
+								out.write("\r\nPassword: ");
 							}
 						} else if (mode == -1) {
 							if (command.equals("quit")) {
