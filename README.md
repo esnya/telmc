@@ -1,4 +1,4 @@
-telmc
+TelMC
 =====
 
 Minecraft server mod. Implements simple telnet server.
