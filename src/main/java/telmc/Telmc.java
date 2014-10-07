@@ -189,6 +189,7 @@ class Session implements Runnable {
 	private Socket socket;
 	private String userName, password;
 	private ArrayList<Session> sessions;
+	private boolean echo = false;
 	
 	Session(Socket socket, ArrayList<Session> sessions, String userName, String password) throws IOException {
 		this.socket = socket;
@@ -245,7 +246,7 @@ class Session implements Runnable {
 							} else {
 								out.write("\r\nPassword: ");
 							}
-						} else if (mode == -1) {
+						} else if (mode == -1 && !command.isEmpty()) {
 							if (command.equals("quit")) {
 								break;
 							} else {
@@ -257,12 +258,59 @@ class Session implements Runnable {
 						}
 					} else {
 						buffer[bufferPointer++] = c;
-						out.write(c);
+						if (echo) {
+							out.write(c);
+						}
 					}
 					out.flush();
 				} else if (c == 0xff) {
 					char cmd = (char)in.read();
-					char opt = (char)in.read();
+					char opt;
+					switch (cmd) {
+					case 0xF0:	// Sub-negotiation End
+						break;
+					case 0xF1:	// No Operation
+						break;
+					case 0xF2:	// Data Mark
+					case 0xF3:	// Break
+					case 0xF4:	// Interrupt Process
+					case 0xF5:	// Abort Output
+					case 0xF6:	// Are You There
+						break;
+					case 0xF7:	// Erase Character
+						--bufferPointer;
+						break;
+					case 0xF8:	// Erase Line
+						bufferPointer = 0;
+						break;
+					case 0xF9:	// Go Ahead
+						break;
+					case 0xFA:	// Sub-negotiation Begin
+						break;
+					case 0xFB:	// WILL
+						opt = (char)in.read();
+						switch (opt) {
+						default:
+							out.write(0xFC);	// WON'T
+							out.flush();
+							break;
+						}
+						break;
+					case 0xFC:	// WON'T
+						opt = (char)in.read();
+						break;
+					case 0xFD:	// DO
+						opt = (char)in.read();
+						switch (opt) {
+						default:
+							out.write(0xFC);	// WON'T
+							out.flush();
+							break;
+						}
+					case 0xFE:	// DON'T
+						opt = (char)in.read();
+						break;
+					}
 				}
 			}
 			
