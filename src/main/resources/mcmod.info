@@ -1,0 +1,16 @@
+[
+{
+  "modid": "telmc",
+  "name": "TelMC",
+  "description": "A simple telnet server for minecraft.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ukatama"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
